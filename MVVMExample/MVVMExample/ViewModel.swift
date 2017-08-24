@@ -6,7 +6,6 @@
 //  Copyright © 2017 Raman Liulkovich. All rights reserved.
 //
 
-import UIKit
 import ReactiveCocoa
 
 //var workers: Property<[Worker]>
@@ -15,26 +14,9 @@ class ViewModel: ViewModelProtocol {
 
     private let dataProvider = WorkersProvider.shared
     internal var workers = [Worker]()
-    internal var needfulWorkers = [Worker]()
+    private var needfulWorkers = [Worker]()
     
-    /*
-    internal init(searchBar: UISearchBar, tableView: UITableView) {
-        searchBar.reactive.continuousTextValues.observeValues {[weak self] (tempText) in
-            guard let strongSelf = self else { return }
-            guard let text = tempText else { return }
-            
-            strongSelf.needfulWorkers = strongSelf.workers.flatMap({ (worker) -> Worker? in
-                if worker.name.contains(text) || text == "" {
-                    return worker
-                }
-                return nil
-            })
-            
-            tableView.reloadData()
-        }
-    }*/
-    
-    func fetchWorkers(completion: @escaping () -> ()) {
+    internal func fetchWorkers(completion: @escaping () -> ()) {
         dataProvider.workers {[weak self] (tempWorkers) in
             guard let strongSelf = self else { return }
             guard let gettingWorkers = tempWorkers else { return }
@@ -42,6 +24,13 @@ class ViewModel: ViewModelProtocol {
             strongSelf.needfulWorkers = gettingWorkers
             completion()
         }
+    }
+    
+    internal func fetchNeedfulWorkers(text: String) {
+        needfulWorkers = workers.flatMap({ (worker) -> Worker? in
+            guard worker.name.contains(text) || text == "" else { return nil }
+            return worker
+        })
     }
     
     internal func numberOfItemsInSection() -> Int {

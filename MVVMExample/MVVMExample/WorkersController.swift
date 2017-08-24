@@ -28,13 +28,7 @@ class WorkersController: UIViewController {
             guard let strongSelf = self else { return }
             guard let text = tempText else { return }
             
-            strongSelf.viewModel.needfulWorkers = strongSelf.viewModel.workers.flatMap({ (worker) -> Worker? in
-                if worker.name.contains(text) || text == "" {
-                    return worker
-                }
-                return nil
-            })
-            
+            strongSelf.viewModel.fetchNeedfulWorkers(text: text)
             strongSelf.workersTable.reloadData()
         }
     }

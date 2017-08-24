@@ -11,7 +11,6 @@ import Foundation
 protocol ViewModelProtocol {
     
     var workers: [Worker] { get set }
-    var needfulWorkers: [Worker] { get set }
     
     func fetchWorkers(completion: @escaping () -> ())
     func numberOfItemsInSection() -> Int
