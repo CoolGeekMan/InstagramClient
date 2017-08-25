@@ -6,15 +6,19 @@
 //  Copyright © 2017 Raman Liulkovich. All rights reserved.
 //
 
+import Foundation
 import ReactiveCocoa
-
-//var workers: Property<[Worker]>
 
 class ViewModel: ViewModelProtocol {
 
     private let dataProvider = WorkersProvider.shared
     internal var workers = [Worker]()
-    private var needfulWorkers = [Worker]()
+    private var listIsChanged = false
+    private var needfulWorkers = [Worker]() {
+        didSet {
+            listIsChanged = oldValue == needfulWorkers ? false : true
+        }
+    }
     
     internal func fetchWorkers(completion: @escaping () -> ()) {
         dataProvider.workers {[weak self] (tempWorkers) in
@@ -26,11 +30,12 @@ class ViewModel: ViewModelProtocol {
         }
     }
     
-    internal func fetchNeedfulWorkers(text: String) {
-        needfulWorkers = workers.flatMap({ (worker) -> Worker? in
-            guard worker.name.contains(text) || text == "" else { return nil }
-            return worker
-        })
+    internal func fetchNeedfulWorkers(text: String, haveChanges: @escaping (Bool) -> ()) {
+        needfulWorkers = workers.filter { (worker) -> Bool in
+            guard worker.name.contains(text) || text == "" else { return false }
+            return true
+        }
+        haveChanges(listIsChanged)
     }
     
     internal func numberOfItemsInSection() -> Int {

@@ -27,9 +27,12 @@ class WorkersController: UIViewController {
         searchBar.reactive.continuousTextValues.observeValues {[weak self] (tempText) in
             guard let strongSelf = self else { return }
             guard let text = tempText else { return }
-            
-            strongSelf.viewModel.fetchNeedfulWorkers(text: text)
-            strongSelf.workersTable.reloadData()
+                        
+            strongSelf.viewModel.fetchNeedfulWorkers(text: text, haveChanges: { (isChange) in
+                if isChange {
+                    strongSelf.workersTable.reloadData()
+                }
+            })
         }
     }
 }
