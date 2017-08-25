@@ -13,6 +13,7 @@ protocol ViewModelProtocol {
     var workers: [Worker] { get set }
     
     func fetchWorkers(completion: @escaping () -> ())
+    func fetchNeedfulWorkers(text: String, haveChanges: @escaping (Bool) -> ())
     func numberOfItemsInSection() -> Int
     func titleForItemAt(indexPath: IndexPath) -> String
 

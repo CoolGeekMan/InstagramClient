@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Worker: NSObject {
+class Worker: Equatable {
     
     internal let name: String
     internal let age: Int
@@ -20,11 +20,10 @@ class Worker: NSObject {
         self.position = position
     }
     
-    override func isEqual(_ object: Any?) -> Bool {
-        guard let tempObject = object as? Worker else { return false }
-        guard name == tempObject.name,
-            age == tempObject.age,
-            position == tempObject.position else { return false }
-        return true
+    static func ==(lhs: Worker, rhs: Worker) -> Bool {
+        return
+            lhs.name == rhs.name &&
+            lhs.age == rhs.age &&
+            lhs.position == rhs.position
     }
 }

@@ -14,7 +14,7 @@ class WorkersController: UIViewController {
     @IBOutlet weak private var searchBar: UISearchBar!
     @IBOutlet weak private var workersTable: UITableView!
     
-    fileprivate var viewModel = ViewModel()
+    fileprivate var viewModel: ViewModelProtocol = ViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +29,8 @@ class WorkersController: UIViewController {
             guard let text = tempText else { return }
                         
             strongSelf.viewModel.fetchNeedfulWorkers(text: text, haveChanges: { (isChange) in
-                if isChange {
-                    strongSelf.workersTable.reloadData()
-                }
+                guard isChange else { return }
+                strongSelf.workersTable.reloadData()
             })
         }
     }
