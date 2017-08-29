@@ -10,7 +10,7 @@ import Foundation
 
 class SignInViewModel {
     
-    private let dataProvider = SignInProvider()
+    internal let dataProvider = SignInProvider()
     internal let dataParser = SignInDataParser()
     
     internal func authorizationRequest() -> URLRequest? {

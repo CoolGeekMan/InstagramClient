@@ -11,7 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInViewController" customModule="Instagram" customModuleProvider="target">
             <connections>
-                <outlet property="signInButton" destination="rYs-sD-ZES" id="AfP-6g-Hpd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="G14-5S-Wel"/>
                 <outlet property="webView" destination="uQb-rO-ja8" id="mCS-LE-7dA"/>
             </connections>
@@ -21,21 +20,18 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rYs-sD-ZES">
-                    <rect key="frame" x="44" y="590" width="287" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Sign In"/>
-                    <connections>
-                        <action selector="signIn:" destination="-1" eventType="touchUpInside" id="nOh-Wn-n6v"/>
-                    </connections>
-                </button>
-                <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uQb-rO-ja8">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="543"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uQb-rO-ja8">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </webView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="uQb-rO-ja8" secondAttribute="bottom" id="Jm1-dz-4J4"/>
+                <constraint firstItem="uQb-rO-ja8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="c8q-hM-hdy"/>
+                <constraint firstAttribute="trailing" secondItem="uQb-rO-ja8" secondAttribute="trailing" id="nE8-cC-Yny"/>
+                <constraint firstItem="uQb-rO-ja8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="re5-T5-UcS"/>
+            </constraints>
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>
     </objects>

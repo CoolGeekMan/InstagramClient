@@ -121,11 +121,10 @@
 		EEF738A21F5591EF00B1F3F7 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				EEF738AA1F5591EF00B1F3F7 /* View */,
-				EEF738AB1F5591EF00B1F3F7 /* ViewModel */,
-				EEF738A31F5591EF00B1F3F7 /* Data */,
 				EEF738B81F55955E00B1F3F7 /* SignInViewController.swift */,
 				EEF738B91F55955E00B1F3F7 /* SignInViewController.xib */,
+				EEF738AB1F5591EF00B1F3F7 /* ViewModel */,
+				EEF738A31F5591EF00B1F3F7 /* Data */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -153,13 +152,6 @@
 				EEF738A71F5591EF00B1F3F7 /* SignInProvider.swift */,
 			);
 			path = "Data Provider";
-			sourceTree = "<group>";
-		};
-		EEF738AA1F5591EF00B1F3F7 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		EEF738AB1F5591EF00B1F3F7 /* ViewModel */ = {
@@ -448,7 +440,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Instagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = testProjects.Instagram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.raman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -461,7 +453,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Instagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = testProjects.Instagram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.raman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

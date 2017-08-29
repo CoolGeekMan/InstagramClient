@@ -10,8 +10,13 @@ import UIKit
 
 class StartViewController: UIViewController {
 
+    @IBOutlet private weak var signInButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    @IBAction private func signIn(_ sender: Any) {
         let signInViewController = SignInViewController(nibName: String(describing: SignInViewController.self), bundle: nil)
         present(signInViewController, animated: false, completion: nil)
     }

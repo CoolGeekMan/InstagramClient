@@ -10,18 +10,14 @@ import UIKit
 
 class SignInViewController: UIViewController {
 
-    @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var webView: UIWebView!
     
     fileprivate let viewModel = SignInViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    @IBAction func signIn(_ sender: Any) {
         guard let request = viewModel.authorizationRequest() else { return }
-        
+        webView.scrollView.bounces = false
         webView.delegate = self
         webView.loadRequest(request)
     }
@@ -32,7 +28,7 @@ extension SignInViewController: UIWebViewDelegate {
         if request.url?.host == viewModel.redirectHOST() {
             guard let url = request.url?.absoluteString else { return false }
             guard let token = viewModel.dataParser.accessToken(redirectURL: url) else { return false }
-
+                        
             return false
         }
         return true

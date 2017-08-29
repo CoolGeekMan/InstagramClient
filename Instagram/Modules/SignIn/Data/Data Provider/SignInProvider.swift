@@ -16,4 +16,13 @@ class SignInProvider {
         guard let url = URL(string: stringURL) else { return nil }
         return url
     }
+    
+    internal func userInfo(token: String) {
+        let url = "\(Global.RequestURL.userInfoURL)?\(Global.RequestParameter.accessToken)=\(token)"
+        
+        Alamofire.request(url).responseJSON { (temp) in
+            guard let json = temp.result.value else {return}
+            print(json)
+        }
+    }
 }
