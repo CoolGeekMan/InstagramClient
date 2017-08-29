@@ -10,16 +10,9 @@ import Foundation
 import Alamofire
 
 class SignInProvider {
-    
-    internal static let shared = SignInProvider()
-    internal let requestParameters = RequestParameters()
-    internal let requestValues = RequestValues()
-    internal let requestURLs = RequestURLs()
-    
-    private init() {}
-    
-    func authorizationURL() -> URL? {
-        let stringURL = "\(requestURLs.authorizationURL)?\(requestParameters.clientID)=\(requestValues.clientID)&\(requestParameters.redirectURL)=\(requestValues.redirectURL)&\(requestParameters.responseType)=\(requestValues.responseType)&\(requestParameters.scope)=\(requestValues.scope)"
+        
+    internal func authorizationURL() -> URL? {
+        let stringURL = "\(Global.RequestURLs.authorizationURL)?\(Global.RequestParameters.clientID)=\(Global.RequestValues.clientID)&\(Global.RequestParameters.redirectURL)=\(Global.RequestValues.redirectURL)&\(Global.RequestParameters.responseType)=\(Global.RequestValues.responseType)&\(Global.RequestParameters.scope)=\(Global.RequestValues.scope)"
         guard let url = URL(string: stringURL) else { return nil }
         return url
     }

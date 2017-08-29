@@ -7,29 +7,38 @@
 //
 
 import UIKit
-import Alamofire
 
 class SignInController: UIViewController {
 
-    @IBOutlet private weak var webView: UIWebView!
-    let viewModel = SignInViewModel()
-
+    @IBOutlet private weak var signInButton: UIButton!
+    
+    fileprivate let viewModel = SignInViewModel()
+    private var webView: SignInView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView.delegate = self
-        
-        guard let request = viewModel.authorizationRequest() else { return }
-        webView.loadRequest(request)
     }
     
+    @IBAction private func signIn(_ sender: Any) {
+        webView = UINib(nibName: "SignInView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as? SignInView
+        
+        guard let tempWebView = webView else { return }
+        guard let request = viewModel.authorizationRequest() else { return }
+
+        view.addSubview(tempWebView)
+        tempWebView.wevView.delegate = self
+        tempWebView.wevView.loadRequest(request)
+    }
 }
 
 extension SignInController: UIWebViewDelegate {
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if request.url?.host == "www.getpostman.com" {
+        if request.url?.host == viewModel.redirectHOST() {
             guard let url = request.url?.absoluteString else { return false }
-            let token = viewModel.dataParser.accessToken(redirectURL: url)
+            guard let token = viewModel.dataParser.accessToken(redirectURL: url) else { return false }
+            viewModel.saveToken(token: token)
+            webView.isHidden = true
             return false
         }
         return true

@@ -10,16 +10,21 @@ import Foundation
 
 class SignInViewModel {
     
-    private let dataProvider = SignInProvider.shared
-    internal let dataParser = SignInDataParser.shared
+    private let dataProvider = SignInProvider()
+    internal let dataParser = SignInDataParser()
     
-    func authorizationRequest() -> URLRequest? {
+    internal func authorizationRequest() -> URLRequest? {
         guard let url = dataProvider.authorizationURL() else { return nil }
         let request = URLRequest(url: url)
         return request
     }
     
-    func redirectHOST() -> String {
-        return dataProvider.requestURLs.redirectHOST
+    internal func redirectHOST() -> String {
+        return Global.RequestURLs.redirectHOST
     }
+    
+    internal func saveToken(token: String) {
+        Global.RequestValues.accsessToken.append(token)
+    }
+    
 }

@@ -10,10 +10,6 @@ import Foundation
 
 class SignInDataParser {
     
-    internal static let shared = SignInDataParser()
-
-    private init() {}
-    
     internal func accessToken(redirectURL: String) -> String? {
         let temp = redirectURL.components(separatedBy: "access_token=")
         guard temp.count > 1 else { return nil }
