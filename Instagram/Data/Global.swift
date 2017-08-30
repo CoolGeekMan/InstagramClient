@@ -28,5 +28,5 @@ internal struct Global {
         static let authorizationURL = "https://api.instagram.com/oauth/authorize/"
         static let userInfoURL = "https://api.instagram.com/v1/users/self/"
         static let redirectHOST = "www.getpostman.com"
-    }
+    }    
 }

@@ -10,9 +10,13 @@ import UIKit
 
 class SignInViewController: UIViewController {
 
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView!
     
     fileprivate let viewModel = SignInViewModel()
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +32,14 @@ extension SignInViewController: UIWebViewDelegate {
         if request.url?.host == viewModel.redirectHOST() {
             guard let url = request.url?.absoluteString else { return false }
             guard let token = viewModel.dataParser.accessToken(redirectURL: url) else { return false }
-                        
+            viewModel.userData(token: token, completion: { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.viewModel.userImage(completion: {
+                    strongSelf.viewModel.saveUser()
+                    let userLibraryViewController = UserLibraryViewController(nibName: String(describing: UserLibraryViewController.self), bundle: nil)
+                    strongSelf.present(userLibraryViewController, animated: false, completion: nil)
+                })
+            })
             return false
         }
         return true
