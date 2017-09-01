@@ -13,6 +13,7 @@ class SignInViewModel {
     internal let dataProvider = SignInProvider()
     internal let coreDataProvider = CacheUserDataProvider()
     internal let dataParser = SignInDataParser()
+    internal let startViewDataProvider = StartViewDataProvider()
     
     private var user: User?
     
@@ -48,5 +49,14 @@ class SignInViewModel {
     internal func saveUser() {
         guard let temp = user else { return }
         coreDataProvider.saveCacheUser(user: temp)
+    }
+    
+    internal func saveUserID(id: String) {
+        startViewDataProvider.saveUserID(id: id)
+    }
+    
+    internal func userID() -> String? {
+        guard let tempUser = user else { return nil }
+        return tempUser.id
     }
 }

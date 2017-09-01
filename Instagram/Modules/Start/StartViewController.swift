@@ -11,9 +11,19 @@ import UIKit
 class StartViewController: UIViewController {
 
     @IBOutlet private weak var signInButton: UIButton!
+    private let viewModel = StartViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let temp = viewModel.haveUser()
+        guard temp else { return }
+        let menuController = MenuTabBarController()
+        present(menuController, animated: true, completion: nil)
     }
     
     @IBAction private func signIn(_ sender: Any) {
