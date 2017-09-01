@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class UserLibraryViewController: UIViewController {
 
@@ -44,7 +43,7 @@ class UserLibraryViewController: UIViewController {
                 usersAlert.addAction(UIAlertAction(title: "\(tempUser.userName)", style: .default, handler: { (action) in
                     strongSelf.viewModel.saveUserID(id: tempUser.id)
                     let tabBarController = MenuTabBarController()
-                    strongSelf.present(tabBarController, animated: true, completion: nil)
+                    strongSelf.present(tabBarController, animated: false, completion: nil)
                 }))
             }
             

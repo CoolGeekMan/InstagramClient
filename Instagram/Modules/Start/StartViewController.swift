@@ -23,7 +23,7 @@ class StartViewController: UIViewController {
         let temp = viewModel.haveUser()
         guard temp else { return }
         let menuController = MenuTabBarController()
-        present(menuController, animated: true, completion: nil)
+        present(menuController, animated: false, completion: nil)
     }
     
     @IBAction private func signIn(_ sender: Any) {

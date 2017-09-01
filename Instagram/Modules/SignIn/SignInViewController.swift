@@ -51,7 +51,7 @@ extension SignInViewController: UIWebViewDelegate {
                     strongSelf.viewModel.saveUser()
                     strongSelf.viewModel.saveUserID(id: id)
                     let tabBar = MenuTabBarController()
-                    strongSelf.present(tabBar, animated: true, completion: nil)
+                    strongSelf.present(tabBar, animated: false, completion: nil)
                 })
             })
             return false
