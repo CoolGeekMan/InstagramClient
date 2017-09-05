@@ -20,13 +20,18 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SiN-Zx-SCE">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SiN-Zx-SCE">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="SiN-Zx-SCE" secondAttribute="bottom" id="0Qh-ri-0bn"/>
+                <constraint firstAttribute="trailing" secondItem="SiN-Zx-SCE" secondAttribute="trailing" id="DxH-Mu-eUA"/>
+                <constraint firstItem="SiN-Zx-SCE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="flw-h5-fAV"/>
+                <constraint firstItem="SiN-Zx-SCE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="obc-9T-sXp"/>
+            </constraints>
             <point key="canvasLocation" x="25.5" y="52.5"/>
         </view>
     </objects>

@@ -18,10 +18,7 @@
 		EE5801E91F56E29900541C29 /* Instagram.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE5801E71F56E29900541C29 /* Instagram.xcdatamodeld */; };
 		EE5801EC1F56E66800541C29 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801EB1F56E66800541C29 /* CoreDataManager.swift */; };
 		EE5801F31F56E76100541C29 /* CacheUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801F11F56E76100541C29 /* CacheUser+CoreDataClass.swift */; };
-		EE5801F41F56E76100541C29 /* CacheUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801F21F56E76100541C29 /* CacheUser+CoreDataProperties.swift */; };
 		EE5801F61F56E80600541C29 /* CacheUserDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801F51F56E80600541C29 /* CacheUserDataProvider.swift */; };
-		EE5801F91F56FA8800541C29 /* MenuTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801F81F56FA8800541C29 /* MenuTabBarController.swift */; };
-		EE5801FC1F57007600541C29 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5801FB1F57007600541C29 /* NavigationViewController.swift */; };
 		EE59853D1F57FDEE0086E31B /* StartViewDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE59853C1F57FDEE0086E31B /* StartViewDataProvider.swift */; };
 		EE59853F1F5800090086E31B /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE59853E1F5800090086E31B /* StartViewModel.swift */; };
 		EE5985411F5845C80086E31B /* UserLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5985401F5845C80086E31B /* UserLibraryViewModel.swift */; };
@@ -52,10 +49,7 @@
 		EE5801E81F56E29900541C29 /* Instagram.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Instagram.xcdatamodel; sourceTree = "<group>"; };
 		EE5801EB1F56E66800541C29 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		EE5801F11F56E76100541C29 /* CacheUser+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CacheUser+CoreDataClass.swift"; sourceTree = "<group>"; };
-		EE5801F21F56E76100541C29 /* CacheUser+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CacheUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EE5801F51F56E80600541C29 /* CacheUserDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheUserDataProvider.swift; sourceTree = "<group>"; };
-		EE5801F81F56FA8800541C29 /* MenuTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTabBarController.swift; sourceTree = "<group>"; };
-		EE5801FB1F57007600541C29 /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		EE59853C1F57FDEE0086E31B /* StartViewDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewDataProvider.swift; sourceTree = "<group>"; };
 		EE59853E1F5800090086E31B /* StartViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		EE5985401F5845C80086E31B /* UserLibraryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLibraryViewModel.swift; sourceTree = "<group>"; };
@@ -107,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				EE5801F11F56E76100541C29 /* CacheUser+CoreDataClass.swift */,
-				EE5801F21F56E76100541C29 /* CacheUser+CoreDataProperties.swift */,
 				EE5801D61F569B0400541C29 /* User.swift */,
 			);
 			path = Model;
@@ -149,22 +142,6 @@
 				EE5801EB1F56E66800541C29 /* CoreDataManager.swift */,
 			);
 			path = DataManager;
-			sourceTree = "<group>";
-		};
-		EE5801F71F56FA6C00541C29 /* Menu */ = {
-			isa = PBXGroup;
-			children = (
-				EE5801F81F56FA8800541C29 /* MenuTabBarController.swift */,
-			);
-			path = Menu;
-			sourceTree = "<group>";
-		};
-		EE5801FA1F57004700541C29 /* NavigationViewController */ = {
-			isa = PBXGroup;
-			children = (
-				EE5801FB1F57007600541C29 /* NavigationViewController.swift */,
-			);
-			path = NavigationViewController;
 			sourceTree = "<group>";
 		};
 		EEC659C11F50542C009EEF35 = {
@@ -214,8 +191,6 @@
 			children = (
 				EEF738AD1F5591EF00B1F3F7 /* Start */,
 				EEF738A21F5591EF00B1F3F7 /* SignIn */,
-				EE5801F71F56FA6C00541C29 /* Menu */,
-				EE5801FA1F57004700541C29 /* NavigationViewController */,
 				EE5801D81F56A88600541C29 /* UserLibrary */,
 			);
 			path = Modules;
@@ -396,6 +371,7 @@
 				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -403,6 +379,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -417,10 +394,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE59853D1F57FDEE0086E31B /* StartViewDataProvider.swift in Sources */,
-				EE5801F41F56E76100541C29 /* CacheUser+CoreDataProperties.swift in Sources */,
 				EEF738BA1F55955E00B1F3F7 /* SignInViewController.swift in Sources */,
 				EEF738B01F5591EF00B1F3F7 /* SignInDataParser.swift in Sources */,
-				EE5801F91F56FA8800541C29 /* MenuTabBarController.swift in Sources */,
 				EE59853F1F5800090086E31B /* StartViewModel.swift in Sources */,
 				EEF738AF1F5591EF00B1F3F7 /* Global.swift in Sources */,
 				EE5801F31F56E76100541C29 /* CacheUser+CoreDataClass.swift in Sources */,
@@ -431,7 +406,6 @@
 				EE5801D71F569B0400541C29 /* User.swift in Sources */,
 				EE5801EC1F56E66800541C29 /* CoreDataManager.swift in Sources */,
 				EEF738B71F5592FD00B1F3F7 /* AppDelegate.swift in Sources */,
-				EE5801FC1F57007600541C29 /* NavigationViewController.swift in Sources */,
 				EEF738B41F5591EF00B1F3F7 /* SignInViewModel.swift in Sources */,
 				EEF738B51F5591EF00B1F3F7 /* StartViewController.swift in Sources */,
 				EE5801DC1F56A8D600541C29 /* UserLibraryViewController.swift in Sources */,

@@ -20,23 +20,29 @@ class UserLibraryViewModel {
     
     private let startViewDataProvider = StartViewDataProvider()
     fileprivate let dataProvider = CacheUserDataProvider()
-    private var user: User?
+    internal var user: User?
+    internal var availableUsers = [User]()
     
-    internal func changeButton() -> String {
-        return Constant.ActionSheet.changeButton
-    }
     
-    internal func addButton() -> String {
+    internal let changeButton: String = {
+       return Constant.ActionSheet.changeButton
+    }()
+    
+    internal let addButton: String = {
         return Constant.ActionSheet.addButton
-    }
+    }()
     
-    internal func cancelButton() -> String {
+    internal let cancelButton: String = {
         return Constant.ActionSheet.cancelButton
-    }
-    
+    }()
+        
     internal func fetchUser() {
         guard let id = startViewDataProvider.userID() else { return }
-        user = dataProvider.user(id: id)
+        do {
+            user = try dataProvider.user(id: id)
+        } catch {
+            print(error)
+        }
     }
     
     internal func userName() -> String? {
@@ -44,13 +50,12 @@ class UserLibraryViewModel {
         return tempUser.userName
     }
     
-    internal func getUser() -> User? { //Я не знаю как назвать без get)
-        return user
-    }
-    
-    internal func users() -> [User] {
-        let tempUsers = dataProvider.users()
-        return tempUsers
+    internal func fetchAvailableUsers() {
+        do {
+            availableUsers = try dataProvider.users()
+        } catch {
+            print(error)
+        }
     }
     
     internal func saveUserID(id: String) {

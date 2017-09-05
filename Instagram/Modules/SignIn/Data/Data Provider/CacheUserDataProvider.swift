@@ -13,7 +13,7 @@ import UIKit
 class CacheUserDataProvider {
     private let coreDataContext = CoreDataManager(modelName: "Instagram")
     
-    internal func user(id: String) -> User? {
+    internal func user(id: String) throws -> User {
         var tempUser: User? = nil
         do {
             let context = coreDataContext.managedObjectContext
@@ -21,39 +21,46 @@ class CacheUserDataProvider {
             let fetchRequest = NSFetchRequest<CacheUser>(entityName: "CacheUser")
             fetchRequest.predicate = NSPredicate(format: "id == %@", id)
             let result = try context.fetch(fetchRequest)
-            guard result.count > 0 else { return nil }
-            guard let token = result[0].token,
-                let fullName = result[0].fullName,
-                let id = result[0].id,
-                let userName = result[0].userName else { return nil }
+            guard result.count > 0 else {
+                throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get user!"])
+            }
             
-            guard let image = result[0].profilePicture as Data? else { return nil }
-            guard let profilePicture = UIImage.init(data: image) else { return nil }
+            guard let image = result[0].profilePicture as Data? else {
+                throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get user!"])
+            }
+            guard let profilePicture = UIImage.init(data: image) else {
+                throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get user!"])
+            }
             
-            tempUser = User(token: token, fullName: fullName, id: id, profilePictureURL: "", userName: userName, followedBy: Int(result[0].followedBy), follows: Int(result[0].follows), media: Int(result[0].media))
+            tempUser = try User(user: result[0])
             tempUser?.profilePicture = profilePicture
         } catch {
             print(error)
         }
-        return tempUser
+        
+        guard let user = tempUser else {
+            throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get user!"])
+        }
+        
+        return user
     }
     
-    internal func users() -> [User] {
+    internal func users() throws -> [User] {
         var tempUsers = [User]()
         do {
             let context = coreDataContext.managedObjectContext
             let result = try context.fetch(NSFetchRequest<CacheUser>(entityName: "CacheUser"))
             
             for user in result {
-                guard let token = user.token,
-                    let fullName = user.fullName,
-                    let id = user.id,
-                    let userName = user.userName else { return tempUsers }
                 
-                guard let image = user.profilePicture as Data? else { return tempUsers }
-                guard let profilePicture = UIImage.init(data: image) else { return tempUsers }
+                guard let image = user.profilePicture as Data? else {
+                    throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get users!"])
+                }
+                guard let profilePicture = UIImage.init(data: image) else {
+                    throw NSError(domain: "CoreDataStack", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get users!"])
+                }
                 
-                let tempUser = User(token: token, fullName: fullName, id: id, profilePictureURL: "", userName: userName, followedBy: Int(user.followedBy), follows: Int(user.follows), media: Int(user.media))
+                let tempUser = try User(user: user)
                 tempUser.profilePicture = profilePicture
                 tempUsers.append(tempUser)
             }
@@ -67,7 +74,7 @@ class CacheUserDataProvider {
         do {
             let context = coreDataContext.managedObjectContext
             let tempUserData = CacheUser(context: context)
-            
+        
             tempUserData.followedBy = Int32(user.followedBy)
             tempUserData.follows = Int32(user.follows)
             tempUserData.fullName = user.fullName

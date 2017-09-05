@@ -21,22 +21,13 @@ class SignInProvider {
         let url = "\(Global.RequestURL.userInfoURL)?\(Global.RequestParameter.accessToken)=\(token)"
         
         Alamofire.request(url).responseJSON { (temp) in
-            guard let json = temp.result.value as? [String: Any],
-                let data = json["data"] as? [String: Any],
-                let counts = data["counts"] as? [String: Any] else { return }
-
-            guard let fullName = data["full_name"] as? String,
-                let id = data["id"] as? String,
-                let profilePictureURL = data["profile_picture"] as? String,
-                let userName = data["username"] as? String else { return }
-
-            guard let followedBy = counts["followed_by"] as? Int,
-                let follows = counts["follows"] as? Int,
-                let media = counts["media"] as? Int else { return }
-            
-            let user = User(token: token, fullName: fullName, id: id, profilePictureURL: profilePictureURL, userName: userName, followedBy: followedBy, follows: follows, media: media)
-            
-            result(user)
+            guard let json = temp.result.value as? [String: Any] else { return }
+            do {
+                let user = try User(json: json, token: token)
+                result(user)
+            } catch {
+                print(error)
+            }
         }
     }
     
