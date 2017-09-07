@@ -12,9 +12,23 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    private let dataprovider = StartViewDataProvider()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        if dataprovider.haveUser() {
+            let tabBarController = UITabBarController()
+            let userViewController = UserLibraryViewController(nibName: String(describing: UserLibraryViewController.self), bundle: nil)
+            let navigationController = UINavigationController(rootViewController: userViewController)
+            navigationController.title = "User"
+            tabBarController.viewControllers = [navigationController]
+            window?.rootViewController = tabBarController
+        } else {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let startViewController = storyboard.instantiateViewController(withIdentifier: "StartViewController")
+            window?.rootViewController = startViewController
+        }
+        
         return true
     }
 

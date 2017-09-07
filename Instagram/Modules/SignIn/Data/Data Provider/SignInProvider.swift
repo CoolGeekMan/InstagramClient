@@ -16,4 +16,27 @@ class SignInProvider {
         guard let url = URL(string: stringURL) else { return nil }
         return url
     }
+    
+    internal func userInfo(token: String, result: @escaping (User?) -> ()) {
+        let url = "\(Global.RequestURL.userInfoURL)?\(Global.RequestParameter.accessToken)=\(token)"
+        
+        Alamofire.request(url).responseJSON { (temp) in
+            guard let json = temp.result.value as? [String: Any] else { return }
+            do {
+                let user = try User(json: json, token: token)
+                result(user)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    internal func image(url: String, result: @escaping (UIImage?) -> ()) {
+        Alamofire.request(url).responseData { (response) in
+            guard let data = response.data else { return }
+            guard let picture = UIImage(data: data) else { return }
+            result(picture)
+        }
+    }
+    
 }

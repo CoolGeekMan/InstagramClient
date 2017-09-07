@@ -10,9 +10,29 @@ import UIKit
 
 class StartViewController: UIViewController {
 
+    @IBOutlet private weak var signInButton: UIButton!
+    private let viewModel = StartViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let temp = viewModel.haveUser()
+        guard temp else { return }
+        
+        let tabBarController = UITabBarController()
+        let userViewController = UserLibraryViewController(nibName: String(describing: UserLibraryViewController.self), bundle: nil)
+        let navigationController = UINavigationController(rootViewController: userViewController)
+        tabBarController.viewControllers = [navigationController]
+        present(tabBarController, animated: false, completion: nil)
+    }
+    
+    @IBAction private func signIn(_ sender: Any) {
         let signInViewController = SignInViewController(nibName: String(describing: SignInViewController.self), bundle: nil)
-        present(signInViewController, animated: false, completion: nil)
+        let navigationController = UINavigationController(rootViewController: signInViewController)
+        present(navigationController, animated: false, completion: nil)
     }
 }

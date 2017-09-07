@@ -15,4 +15,5 @@ class SignInDataParser {
         guard temp.count > 1 else { return nil }
         return temp[1]
     }
+    
 }

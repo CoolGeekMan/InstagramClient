@@ -29,4 +29,8 @@ internal struct Global {
         static let userInfoURL = "https://api.instagram.com/v1/users/self/"
         static let redirectHOST = "www.getpostman.com"
     }
+    
+    internal struct UserSaves {
+        static let userID = "userID"
+    }
 }

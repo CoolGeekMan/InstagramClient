@@ -10,31 +10,71 @@ import UIKit
 
 class SignInViewController: UIViewController {
 
-    @IBOutlet weak var signInButton: UIButton!
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView!
     
     fileprivate let viewModel = SignInViewModel()
+    private lazy var cancel: UIBarButtonItem = {
+        return UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(dismissSignInController))
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    @IBAction func signIn(_ sender: Any) {
-        guard let request = viewModel.authorizationRequest() else { return }
         
+        clearCache()
+        
+        guard let request = viewModel.authorizationRequest() else { return }
+        webView.scrollView.bounces = false
         webView.delegate = self
         webView.loadRequest(request)
+        
+        navigationItem.title = "Sign In"
+        navigationItem.leftBarButtonItems = [cancel]
     }
+    
+    @objc private func dismissSignInController() {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension SignInViewController: UIWebViewDelegate {
+    
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+
         if request.url?.host == viewModel.redirectHOST() {
             guard let url = request.url?.absoluteString else { return false }
             guard let token = viewModel.dataParser.accessToken(redirectURL: url) else { return false }
-
+            viewModel.userData(token: token, completion: { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.viewModel.userImage(completion: {
+                    guard let id = strongSelf.viewModel.userID() else { return }
+                    strongSelf.viewModel.saveUser()
+                    strongSelf.viewModel.saveUserID(id: id)
+                    let tabBarController = UITabBarController()
+                    let userViewController = UserLibraryViewController(nibName: String(describing: UserLibraryViewController.self), bundle: nil)
+                    let navigationController = UINavigationController(rootViewController: userViewController)
+                    navigationController.title = "User"
+                    tabBarController.viewControllers = [navigationController]
+                    strongSelf.present(tabBarController, animated: false, completion: nil)
+                })
+            })
             return false
         }
         return true
+    }
+}
+
+extension SignInViewController {
+    
+    fileprivate func clearCache() {
+        URLCache.shared.removeAllCachedResponses()
+        URLCache.shared.diskCapacity = 0
+        URLCache.shared.memoryCapacity = 0
+        
+        if let cookies = HTTPCookieStorage.shared.cookies {
+            for cookie in cookies {
+                HTTPCookieStorage.shared.deleteCookie(cookie)
+            }
+        }
     }
 }
