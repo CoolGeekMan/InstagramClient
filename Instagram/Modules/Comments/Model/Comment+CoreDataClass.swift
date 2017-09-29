@@ -7,7 +7,12 @@
 //
 
 import Foundation
+import UIKit
 import CoreData
+
+enum CommentError: Error {
+    case impossibleSaveComments
+}
 
 @objc(Comment)
 public class Comment: NSManagedObject {
@@ -29,56 +34,48 @@ extension Comment {
     @NSManaged public var userID: String?
     @NSManaged public var fullName: String?
     @NSManaged public var id: String?
-    
+    public var photoImage: UIImage? {
+        get {
+            guard let data = image else {
+                return nil
+            }
+            return UIImage(data: data as Data)
+        }
+    }
+
 }
 
 extension Comment {
     
-    static func comments(json: [String: Any], mediaID: String) throws {
-        let coreDataContext = CoreDataManager(modelName: "Instagram")
+    static func comment(comment: [String: Any], mediaID: String, context: NSManagedObjectContext) throws -> Comment {
+        let tempComment = Comment(context: context)
         
-        guard let data = json["data"] as? [[String: Any]] else {
-            throw NSError(domain: "Test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get"])
-        }
-        
-        do {
-            let context = coreDataContext.managedObjectContext
-
-            for comment in data {
-                guard let id = comment["id"] as? String,
-                    let text = comment["text"] as? String,
-                    let createdTime = comment["created_time"] as? String,
-                    let doubleTime = Double(createdTime) else {
-                        throw NSError(domain: "Test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get"])
-                }
-                
-                let date = NSDate(timeIntervalSince1970: doubleTime)
-                
-                guard let from = comment["from"] as? [String: Any],
-                    let userName = from["username"] as? String,
-                    let userPhoto = from["profile_picture"] as? String,
-                    let userID = from["id"] as? String,
-                    let fullName = from["full_name"] as? String else {
-                        throw NSError(domain: "Test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't get"])
-                }
-                
-                let tempComment = Comment(context: context)
-
-                tempComment.createdTime = date
-                tempComment.id = id
-                tempComment.text = text
-                tempComment.username = userName
-                tempComment.userID = userID
-                tempComment.imageLink = userPhoto
-                tempComment.fullName = fullName
-                tempComment.mediaID = mediaID
-                
-                try context.save()
+        guard let id = comment["id"] as? String,
+            let text = comment["text"] as? String,
+            let createdTime = comment["created_time"] as? String,
+            let doubleTime = Double(createdTime) else {
+                throw CommentError.impossibleSaveComments
             }
-            
-        } catch {
-            print(error)
+                
+        let date = NSDate(timeIntervalSince1970: doubleTime)
+        
+        guard let from = comment["from"] as? [String: Any],
+            let userName = from["username"] as? String,
+            let userPhoto = from["profile_picture"] as? String,
+            let userID = from["id"] as? String,
+            let fullName = from["full_name"] as? String else {
+                throw CommentError.impossibleSaveComments
         }
-    }
-    
+        
+        tempComment.createdTime = date
+        tempComment.id = id
+        tempComment.text = text
+        tempComment.username = userName
+        tempComment.userID = userID
+        tempComment.imageLink = userPhoto
+        tempComment.fullName = fullName
+        tempComment.mediaID = mediaID
+        
+        return tempComment
+    }    
 }

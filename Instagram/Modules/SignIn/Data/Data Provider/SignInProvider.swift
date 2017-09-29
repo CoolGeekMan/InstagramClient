@@ -13,7 +13,9 @@ class SignInProvider {
         
     internal func authorizationURL() -> URL? {
         let stringURL = "\(Global.RequestURL.authorizationURL)?\(Global.RequestParameter.clientID)=\(Global.RequestValue.clientID)&\(Global.RequestParameter.redirectURL)=\(Global.RequestValue.redirectURL)&\(Global.RequestParameter.responseType)=\(Global.RequestValue.responseType)&\(Global.RequestParameter.scope)=\(Global.RequestValue.scope)"
-        guard let url = URL(string: stringURL) else { return nil }
+        guard let url = URL(string: stringURL) else {
+            return nil
+        }
         return url
     }
     
@@ -21,7 +23,9 @@ class SignInProvider {
         let url = "\(Global.RequestURL.userInfoURL)?\(Global.RequestParameter.accessToken)=\(token)"
         
         Alamofire.request(url).responseJSON { (temp) in
-            guard let json = temp.result.value as? [String: Any] else { return }
+            guard let json = temp.result.value as? [String: Any] else {
+                return
+            }
             do {
                 let user = try User(json: json, token: token)
                 result(user)
@@ -33,8 +37,12 @@ class SignInProvider {
     
     internal func image(url: String, result: @escaping (UIImage?) -> ()) {
         Alamofire.request(url).responseData { (response) in
-            guard let data = response.data else { return }
-            guard let picture = UIImage(data: data) else { return }
+            guard let data = response.data else {
+                return
+            }
+            guard let picture = UIImage(data: data) else {
+                return
+            }
             result(picture)
         }
     }

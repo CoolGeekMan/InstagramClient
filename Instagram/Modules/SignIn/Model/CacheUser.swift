@@ -17,7 +17,7 @@ public class CacheUser: NSManagedObject {
 extension CacheUser {
     
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CacheUser> {
-        return NSFetchRequest<CacheUser>(entityName: "CacheUser")
+        return NSFetchRequest<CacheUser>(entityName: String(describing: CacheUser.self))
     }
     
     @NSManaged public var token: String?

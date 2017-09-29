@@ -10,9 +10,17 @@ import Foundation
 
 class SignInDataParser {
     
+    private struct Constant {
+        internal struct Separator {
+            internal static let forRedirectURL = "access_token="
+        }
+    }
+    
     internal func accessToken(redirectURL: String) -> String? {
-        let temp = redirectURL.components(separatedBy: "access_token=")
-        guard temp.count > 1 else { return nil }
+        let temp = redirectURL.components(separatedBy: Constant.Separator.forRedirectURL)
+        guard temp.count > 1 else {
+            return nil
+        }
         return temp[1]
     }
     

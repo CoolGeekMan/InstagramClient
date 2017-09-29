@@ -36,4 +36,14 @@ internal struct Global {
     internal struct UserSaves {
         static let userID = "userID"
     }
+    
+    internal struct TabBarTitle {
+        static let user = "User"
+        static let signIn = "Sign In"
+        static let comment = "Comments"
+    }
+    
+    internal struct Button {
+        static let cancel = "Cancel"
+    }
 }
