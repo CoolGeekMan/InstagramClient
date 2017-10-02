@@ -10,7 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-enum SectionType: Int {
+enum BoxSectionType: Int {
     case header = 0
     case displayStyleControl = 1
     case sizeControl = 2
@@ -18,23 +18,6 @@ enum SectionType: Int {
 }
 
 class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
-    
-    private struct Constant {
-        internal struct ActionSheet {
-            internal static let changeButton = "Change user"
-            internal static let addButton = "Add user"
-            internal static let cancelButton = "Cancel"
-        }
-        internal struct Cell {
-            static let header = "HeaderCell"
-            static let post = "PostCell"
-            static let control = "ControlCell"
-            static let sizeControl = "SizeControlCell"
-            static let photo = "PhotoCell"
-        }
-        static let sectionCount = 4
-        static let countCellsFromControlSection = 1
-    }
     
     let viewModel: UserLibraryViewModel
     let cellsCount: MutableProperty<Int>
@@ -99,19 +82,19 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return Constant.sectionCount
+        return Global.Cell.boxSectionCount
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let countCells: Int
-        guard let sectionType = SectionType(rawValue: section) else {
+        guard let sectionType = BoxSectionType(rawValue: section) else {
             return 0
         }
         switch sectionType {
         case .photo:
-            countCells = viewModel.cellCount(displayStyle: .Box) - 3
+            countCells = viewModel.cellCount(displayStyle: .Box)
         default:
-            countCells = Constant.countCellsFromControlSection
+            countCells = Global.Cell.countCellsFromControlSection
         }
         return countCells
     }
@@ -120,26 +103,26 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
         guard let tempUser = viewModel.user else {
             return UICollectionViewCell()
         }
-        guard let sectionType = SectionType(rawValue: indexPath.section) else {
+        guard let sectionType = BoxSectionType(rawValue: indexPath.section) else {
             return UICollectionViewCell()
         }
         
         switch sectionType {
         case .header:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Cell.header, for: indexPath) as? HeaderCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.header, for: indexPath) as? HeaderCell else {
                 return UICollectionViewCell()
             }
             cell.configure(user: tempUser)
             return cell
         case .displayStyleControl:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Cell.control, for: indexPath) as? ControlCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.control, for: indexPath) as? ControlCell else {
                 return UICollectionViewCell()
             }
             cell.postListButton.reactive.pressed = postListButtonAction()
             cell.boxListButton.reactive.pressed = boxListButtonAction()
             return cell
         case .sizeControl:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Cell.sizeControl, for: indexPath) as? SizeControlCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.sizeControl, for: indexPath) as? SizeControlCell else {
                 return UICollectionViewCell()
             }
             
@@ -148,7 +131,7 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
             }
             return cell
         case .photo:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Cell.photo, for: indexPath) as? PhotoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.photo, for: indexPath) as? PhotoCell else {
                 return UICollectionViewCell()
             }
             let index = indexPath.row
@@ -160,7 +143,7 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
                     cell.photo.image = UIImage(data: data)
                 }
             }
-            cell.photoChooseButton.reactive.pressed = photoChooseButtonAction(indexPath: IndexPath.init(row: indexPath.row + 2, section: 0), collectionView: collectionView)
+            cell.photoChooseButton.reactive.pressed = photoChooseButtonAction(indexPath: IndexPath.init(row: 1, section: indexPath.row + 2), collectionView: collectionView)
             return cell
         }
     
@@ -171,16 +154,16 @@ extension UserLibraryBoxDataSource: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size: CGSize
         
-        guard let sectionType = SectionType(rawValue: indexPath.section) else {
+        guard let sectionType = BoxSectionType(rawValue: indexPath.section) else {
             return CGSize(width: 0, height: 0)
         }
         
-        switch indexPath.section {
-        case 0:
+        switch sectionType {
+        case .header:
             size = CGSize(width: collectionView.frame.width - 10, height: 150)
-        case 1:
+        case .displayStyleControl:
             size = CGSize(width: collectionView.frame.width - 10, height: 30)
-        case 2:
+        case .sizeControl:
             size = CGSize(width: collectionView.frame.width - 10, height: 39)
         default:
             let side = (collectionView.frame.width / CGFloat(cellsCount.value)) - 0.5

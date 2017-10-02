@@ -26,6 +26,8 @@ class UserLibraryViewModel {
     
     var photos: MutableProperty<[Photo]> = MutableProperty([])
     
+
+    
     internal func fetchUser() {
         do {
             let id = try authorizationProvider.userID()
@@ -104,7 +106,7 @@ class UserLibraryViewModel {
         case .List:
             cellCount += 2
         case .Box:
-            cellCount += 3
+            break
         }
         
         return cellCount

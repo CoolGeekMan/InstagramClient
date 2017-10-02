@@ -46,4 +46,21 @@ internal struct Global {
     internal struct Button {
         static let cancel = "Cancel"
     }
+    
+    internal struct Cell {
+        static let header = "HeaderCell"
+        static let post = "PostCell"
+        static let control = "ControlCell"
+        static let sizeControl = "SizeControlCell"
+        static let photo = "PhotoCell"
+        static let headerPost = "HeaderPostCell"
+        static let photoPost = "PhotoPostCell"
+        static let datePost = "DatePostCell"
+        static let likesPost = "LikesPostCell"
+        static let commentsPost = "CommentsPostCell"
+        static let boxSectionCount = 4
+        static let listSectionCount = 3
+        static let countCellsFromControlSection = 1
+        static let countCellsFromPostSection = 5
+    }
 }

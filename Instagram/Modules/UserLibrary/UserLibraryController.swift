@@ -10,7 +10,11 @@ import UIKit
 import ReactiveCocoa
 import ReactiveSwift
 
-class UserLibraryController: UIViewController {
+protocol UserLibraryDelegate: class {
+    func navigatToCommentsViewController(mediaID: String)
+}
+
+class UserLibraryController: UIViewController, UserLibraryDelegate {
 
     fileprivate struct Constant {
         internal struct ActionSheet {
@@ -18,18 +22,11 @@ class UserLibraryController: UIViewController {
             internal static let addButton = "Add user"
             internal static let cancelButton = "Cancel"
         }
-        internal struct Cell {
-            static let header = "HeaderCell"
-            static let post = "PostCell"
-            static let control = "ControlCell"
-            static let sizeControl = "SizeControlCell"
-            static let photo = "PhotoCell"
-        }
         internal struct Button {
             static let change = "Change"
         }
     }
-    
+
     @IBOutlet weak var collectionView: UICollectionView!
     internal let viewModel = UserLibraryViewModel()
     private lazy var change: UIBarButtonItem = UIBarButtonItem(title: Constant.Button.change, style: .done, target: self, action: #selector(presentActionSheet))
@@ -47,18 +44,30 @@ class UserLibraryController: UIViewController {
     var boxDelegate: UserLibraryBoxDataSource!
     var listDelegate: UserLibraryListDataSource!
     
+    func navigatToCommentsViewController(mediaID: String) {
+        let viewController = CommentsViewController()
+        viewController.viewModel.mediaID = mediaID
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        collectionView.register(UINib(nibName: Constant.Cell.header, bundle: nil), forCellWithReuseIdentifier: Constant.Cell.header)
-        collectionView.register(UINib(nibName: Constant.Cell.control, bundle: nil), forCellWithReuseIdentifier: Constant.Cell.control)
-        collectionView.register(UINib(nibName: Constant.Cell.sizeControl, bundle: nil), forCellWithReuseIdentifier: Constant.Cell.sizeControl)
-        collectionView.register(UINib(nibName: Constant.Cell.photo, bundle: nil), forCellWithReuseIdentifier: Constant.Cell.photo)
-        collectionView.register(UINib(nibName: Constant.Cell.post, bundle: nil), forCellWithReuseIdentifier: Constant.Cell.post)
+    
+        collectionView.register(UINib(nibName: Global.Cell.header, bundle: nil), forCellWithReuseIdentifier: Global.Cell.header)
+        collectionView.register(UINib(nibName: Global.Cell.control, bundle: nil), forCellWithReuseIdentifier: Global.Cell.control)
+        collectionView.register(UINib(nibName: Global.Cell.sizeControl, bundle: nil), forCellWithReuseIdentifier: Global.Cell.sizeControl)
+        collectionView.register(UINib(nibName: Global.Cell.photo, bundle: nil), forCellWithReuseIdentifier: Global.Cell.photo)
+        collectionView.register(UINib(nibName: Global.Cell.post, bundle: nil), forCellWithReuseIdentifier: Global.Cell.post)
+
+        collectionView.register(UINib(nibName: Global.Cell.headerPost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.headerPost)
+        collectionView.register(UINib(nibName: Global.Cell.photoPost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.photoPost)
+        collectionView.register(UINib(nibName: Global.Cell.datePost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.datePost)
+        collectionView.register(UINib(nibName: Global.Cell.likesPost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.likesPost)
+        collectionView.register(UINib(nibName: Global.Cell.commentsPost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.commentsPost)
 
 
         boxDelegate = UserLibraryBoxDataSource(viewModel: viewModel, cellsCount: cellsCount, displayStyle: displayStyle)
-        listDelegate = UserLibraryListDataSource(viewModel: viewModel, cellsCount: cellsCount, displayStyle: displayStyle)
+        listDelegate = UserLibraryListDataSource(viewModel: viewModel, delegate: self, cellsCount: cellsCount, displayStyle: displayStyle)
         
         collectionView.dataSource = boxDelegate
         collectionView.delegate = boxDelegate

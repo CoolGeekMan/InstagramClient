@@ -29,8 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let tabBarController = UITabBarController()
             
             let userViewController = UserLibraryController(nibName: String(describing: UserLibraryController.self), bundle: nil)
-
-//            let userViewController = UserLibraryViewController(nibName: String(describing: UserLibraryViewController.self), bundle: nil)
             let navigationController = UINavigationController(rootViewController: userViewController)
             navigationController.title = Global.TabBarTitle.user
             tabBarController.viewControllers = [navigationController]
