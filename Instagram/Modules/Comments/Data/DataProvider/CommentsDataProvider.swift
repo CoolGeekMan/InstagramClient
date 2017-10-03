@@ -11,17 +11,14 @@ import Alamofire
 
 class CommentsDataProvider {
     
-    internal func mediaComments(token: String, mediaID: String, completion: @escaping () -> ()) {
+    internal func mediaComments(token: String, mediaID: String, result: @escaping ([String: Any]) -> ()) {
         let url = "\(Global.RequestURL.mediaURL)\(mediaID)\(Global.RequestURL.comments)?\(Global.RequestParameter.accessToken)=\(token)"
         
         Alamofire.request(url).responseJSON { (temp) in
-            guard let json = temp.result.value as? [String: Any] else { return }
-            do {
-                try Comment.comments(json: json, mediaID: mediaID)
-                completion()
-            } catch {
-                print(error)
+            guard let json = temp.result.value as? [String: Any] else {
+                return
             }
+            result(json)
         }
     }
     

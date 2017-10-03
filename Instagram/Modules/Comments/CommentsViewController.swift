@@ -15,15 +15,15 @@ class CommentsViewController: UIViewController {
     let viewModel = CommentsViewModel()
     
     fileprivate var fetchedResultsController: NSFetchedResultsController<Comment>!
-    fileprivate let coreDataManager = CoreDataManager(modelName: "Instagram")
+    fileprivate let coreDataManager = CoreDataManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setFetchedResultController()
-        navigationItem.title = "Comments"
+        navigationItem.title = Global.TabBarTitle.comment
         
-        tableView.register(UINib(nibName: "CommentViewCell", bundle: nil), forCellReuseIdentifier: "CommentViewCell")
+        tableView.register(UINib(nibName: viewModel.commentCell, bundle: nil), forCellReuseIdentifier: viewModel.commentCell)
         
         tableView.separatorStyle = .none
         tableView.dataSource = self
@@ -50,11 +50,17 @@ class CommentsViewController: UIViewController {
     }
     
     func setFetchedResultController() {
-        let fetchRequest: NSFetchRequest<Comment> = Comment.fetchRequest()
-        fetchRequest.sortDescriptors = []
-        fetchRequest.predicate = NSPredicate(format: "mediaID == %@", viewModel.mediaID)
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataManager.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
+        
+        do {
+            let fetchRequest: NSFetchRequest<Comment> = Comment.fetchRequest()
+            fetchRequest.sortDescriptors = []
+            let context = try coreDataManager.managedObjectContext()
+            fetchRequest.predicate = NSPredicate(format: "mediaID == %@", viewModel.mediaID)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController.delegate = self
+        } catch {
+            print(error)
+        }
     }
     
     func fetchComments() {
@@ -118,10 +124,10 @@ extension CommentsViewController: UITableViewDataSource {
             return
         }
         
-        cell.createdTime.text = "\(time)"
+        cell.createdTime.text = viewModel.timeText(date: time as Date)
         
-        if let image = comment.image {
-            cell.userPhoto.image = UIImage(data: image as Data)
+        if let image = comment.photoImage {
+            cell.userPhoto.image = image
         } else {
             guard let link = comment.imageLink else {
                 return
@@ -152,7 +158,7 @@ extension CommentsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CommentViewCell", for: indexPath) as? CommentViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.commentCell, for: indexPath) as? CommentViewCell else {
             return UITableViewCell()
         }
         

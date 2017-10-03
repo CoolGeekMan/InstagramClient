@@ -15,12 +15,4 @@ class CommentViewCell: UITableViewCell {
     @IBOutlet weak var createdTime: UILabel!
     @IBOutlet weak var comment: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
 }

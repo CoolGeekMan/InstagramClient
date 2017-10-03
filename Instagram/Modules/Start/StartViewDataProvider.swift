@@ -8,21 +8,20 @@
 
 import Foundation
 
+enum UserLogin: Error {
+    case impossibleGettingSavesUserID
+}
+
 class StartViewDataProvider {
     
     internal func saveUserID(id: String) {
         UserDefaults.standard.set(id, forKey: Global.UserSaves.userID)
     }
     
-    internal func haveUser() -> Bool {
-        guard (UserDefaults.standard.value(forKey: Global.UserSaves.userID) as? String) != nil else {
-            return false
+    internal func userID() throws -> String {
+        guard let id = UserDefaults.standard.value(forKey: Global.UserSaves.userID) as? String else {
+            throw UserLogin.impossibleGettingSavesUserID
         }
-        return true
-    }
-    
-    internal func userID() -> String? {
-        guard let id = UserDefaults.standard.value(forKey: Global.UserSaves.userID) as? String else { return nil }
         return id
     }
 }

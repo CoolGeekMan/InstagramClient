@@ -10,20 +10,13 @@ import Foundation
 import CoreData
 import UIKit
 
-enum CacheUserError: Error {
-    case impossibleGettingUser
-    case impossibleGettingUsers
-    case impossibleCreateUser
-}
-
-
 class CacheUserDataProvider {
-    private let coreDataContext = CoreDataManager(modelName: "Instagram")
+    fileprivate let coreDataManager = CoreDataManager.shared
     
     internal func user(id: String) throws -> User {
         var tempUser: User? = nil
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             
             let fetchRequest = NSFetchRequest<CacheUser>(entityName: "CacheUser")
             fetchRequest.predicate = NSPredicate(format: "id == %@", id)
@@ -55,7 +48,7 @@ class CacheUserDataProvider {
     internal func users() throws -> [User] {
         var tempUsers = [User]()
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let result = try context.fetch(NSFetchRequest<CacheUser>(entityName: "CacheUser"))
             
             for user in result {
@@ -79,7 +72,7 @@ class CacheUserDataProvider {
     
     internal func saveCacheUser(user: User) {
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let tempUserData = CacheUser(context: context)
         
             tempUserData.followedBy = Int32(user.followedBy)
@@ -96,14 +89,14 @@ class CacheUserDataProvider {
             
             try context.save()
         } catch {
-            print("Error info: \(error)")
+            print(error)
         }
     }
 
     internal func userCount() -> Int {
         var count = 0
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let result = try context.fetch(NSFetchRequest<CacheUser>(entityName: "CacheUser"))
             count = result.count
         } catch {
@@ -114,7 +107,7 @@ class CacheUserDataProvider {
     
     internal func removeUser(id: String) {
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let fetchRequest = NSFetchRequest<CacheUser>(entityName: "CacheUser")
             fetchRequest.predicate = NSPredicate(format: "id == %@", id)
             let result = try context.fetch(fetchRequest)

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ControlCell" customModule="Instagram" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lht-Rb-ePR">
+                        <rect key="frame" x="0.0" y="0.0" width="160" height="30"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIH-6j-klR">
+                                <rect key="frame" x="71" y="6" width="19" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="19" id="N2s-om-lGk"/>
+                                    <constraint firstAttribute="height" constant="19" id="ddk-Xd-AFg"/>
+                                </constraints>
+                                <state key="normal" image="cubsMenu"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LIH-6j-klR" firstAttribute="centerY" secondItem="Lht-Rb-ePR" secondAttribute="centerY" id="1Wd-hp-1Cs"/>
+                            <constraint firstItem="LIH-6j-klR" firstAttribute="centerX" secondItem="Lht-Rb-ePR" secondAttribute="centerX" id="XCs-Lx-ub8"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klp-Z8-tcm">
+                        <rect key="frame" x="160" y="0.0" width="160" height="30"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gsP-ai-M4Z">
+                                <rect key="frame" x="71" y="7" width="19" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="17" id="AYJ-oI-ICM"/>
+                                    <constraint firstAttribute="width" constant="19" id="o0W-GJ-tlV"/>
+                                </constraints>
+                                <state key="normal" image="lineMenu"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gsP-ai-M4Z" firstAttribute="centerX" secondItem="klp-Z8-tcm" secondAttribute="centerX" id="0Dc-e1-0iF"/>
+                            <constraint firstItem="gsP-ai-M4Z" firstAttribute="centerY" secondItem="klp-Z8-tcm" secondAttribute="centerY" id="t9V-qW-5z5"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="Lht-Rb-ePR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="3He-4d-sJT"/>
+                <constraint firstItem="klp-Z8-tcm" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="7jo-HA-tPn"/>
+                <constraint firstItem="Lht-Rb-ePR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="9Kh-QJ-9pP"/>
+                <constraint firstAttribute="trailing" secondItem="klp-Z8-tcm" secondAttribute="trailing" id="N6W-jN-TLB"/>
+                <constraint firstItem="klp-Z8-tcm" firstAttribute="leading" secondItem="Lht-Rb-ePR" secondAttribute="trailing" id="UV5-ZR-OTn"/>
+                <constraint firstAttribute="bottom" secondItem="klp-Z8-tcm" secondAttribute="bottom" id="Zqb-yC-AV7"/>
+                <constraint firstItem="klp-Z8-tcm" firstAttribute="width" secondItem="Lht-Rb-ePR" secondAttribute="width" id="ed6-OE-jNn"/>
+                <constraint firstItem="klp-Z8-tcm" firstAttribute="height" secondItem="Lht-Rb-ePR" secondAttribute="height" id="hr8-MF-zvl"/>
+                <constraint firstAttribute="bottom" secondItem="Lht-Rb-ePR" secondAttribute="bottom" id="pvp-cp-yhX"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="320" height="30"/>
+            <connections>
+                <outlet property="boxListButton" destination="LIH-6j-klR" id="Hcd-W8-rdW"/>
+                <outlet property="postListButton" destination="gsP-ai-M4Z" id="YOg-F9-vUV"/>
+            </connections>
+            <point key="canvasLocation" x="-18" y="-12"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="cubsMenu" width="35" height="35"/>
+        <image name="lineMenu" width="26" height="23"/>
+    </resources>
+</document>

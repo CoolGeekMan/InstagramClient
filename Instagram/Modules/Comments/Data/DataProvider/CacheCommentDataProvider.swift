@@ -11,12 +11,29 @@ import CoreData
 
 class CacheCommentDataProvider {
     
-    private let coreDataContext = CoreDataManager(modelName: "Instagram")
+    fileprivate let coreDataManager = CoreDataManager.shared
+    
+    func saveComments(json: [String: Any], id: String) throws {
+        do {
+            let context = try coreDataManager.managedObjectContext()
+            
+            guard let data = json["data"] as? [[String: Any]] else {
+                throw PhotoError.impossibleGetPhotos
+            }
+            
+            for comment in data {
+                _ = try Comment.comment(comment: comment, mediaID: id, context: context)
+                try context.save()
+            }
+        } catch {
+            print(error)
+        }
+    }
     
     internal func haveComments(mediaID: String) -> Bool {
         var result = false
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let fetchRequest = NSFetchRequest<Comment>(entityName: "Comment")
             fetchRequest.predicate = NSPredicate(format: "mediaID == %@", mediaID)
             let comments = try context.fetch(fetchRequest)
@@ -30,7 +47,7 @@ class CacheCommentDataProvider {
     internal func comments(mediaID: String) -> [Comment] {
         var tempComments = [Comment]()
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let fetchRequest = NSFetchRequest<Comment>(entityName: "Comment")
             fetchRequest.predicate = NSPredicate(format: "mediaID == %@", mediaID)
             let result = try context.fetch(fetchRequest)
@@ -43,7 +60,7 @@ class CacheCommentDataProvider {
     
     internal func savePhoto(id: String, data: NSData) {
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let fetchRequest = NSFetchRequest<Comment>(entityName: "Comment")
             fetchRequest.predicate = NSPredicate(format: "id == %@", id)
             let comments = try context.fetch(fetchRequest)
@@ -53,13 +70,13 @@ class CacheCommentDataProvider {
             comments[0].image = data
             try context.save()
         } catch {
-            
+            print(error)
         }
     }
     
     internal func removeComments(id: String) {
         do {
-            let context = coreDataContext.managedObjectContext
+            let context = try coreDataManager.managedObjectContext()
             let fetchRequest = NSFetchRequest<Comment>(entityName: "Comment")
             fetchRequest.predicate = NSPredicate(format: "mediaID == %@", id)
             let result = try context.fetch(fetchRequest)
