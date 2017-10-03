@@ -13,6 +13,14 @@ import ReactiveCocoa
 enum ListSectionType: Int {
     case header = 0
     case displayStyleControl = 1
+    
+    static let count: Int = {
+        var max: Int = 0
+        while let _ = ListSectionType(rawValue: max) {
+            max += 1
+        }
+        return max
+    }()
 }
 
 enum ListCellType: Int {
@@ -23,49 +31,41 @@ enum ListCellType: Int {
     case comments = 4
 }
 
-class UserLibraryListDataSource: NSObject, UICollectionViewDataSource {
+class UserLibraryListDataSource: NSObject, UserLibraryDataSourceProtocol {
+    
+    fileprivate struct Constant {
+        internal struct CellSize {
+            static let indents: CGFloat = 10
+            static let headerHeight: CGFloat = 150
+            static let displayStyleControlHeight: CGFloat = 30
+            static let headerPostHeight: CGFloat = 50
+            static let datePostHeight: CGFloat = 25
+            static let likesPostHeight: CGFloat = 25
+            static let commentsPostHeight: CGFloat = 27
+        }
+        static let dateFormat = "dd.MM.yyyy HH:mm"
+    }
     
     let delegate: UserLibraryDelegate
     let viewModel: UserLibraryViewModel
-    let cellsCount: MutableProperty<Int>!
-    let displayStyle: MutableProperty<DisplayStyle>
+    var displayStyle: MutableProperty<DisplayStyle>
 
-    init(viewModel: UserLibraryViewModel, delegate: UserLibraryDelegate, cellsCount: MutableProperty<Int>, displayStyle: MutableProperty<DisplayStyle>) {
+    init(viewModel: UserLibraryViewModel, delegate: UserLibraryDelegate, displayStyle: MutableProperty<DisplayStyle>) {
         self.viewModel = viewModel
         self.delegate = delegate
-        self.cellsCount = cellsCount
         self.displayStyle = displayStyle
     }
     
     private func createdTime(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        dateFormatter.dateFormat = Constant.dateFormat
         let stringTime = dateFormatter.string(from: date)
         return stringTime
     }
     
-    private func postListButtonAction() -> CocoaAction<UIButton> {
-        return CocoaAction<UIButton>(Action<Void, Void, NSError>{ _ in
-            let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.displayStyle.value = .List
-            }
-            return producer
-        })
-    }
-    
-    private func boxListButtonAction() -> CocoaAction<UIButton> {
-        return CocoaAction<UIButton>(Action<Void, Void, NSError>{ _ in
-            let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.displayStyle.value = .Box
-            }
-            return producer
-        })
+    private func getIndexForSection(indexPath: IndexPath) -> Int {
+        let index = indexPath.section - ListSectionType.count
+        return index
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -106,17 +106,16 @@ class UserLibraryListDataSource: NSObject, UICollectionViewDataSource {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.control, for: indexPath) as? ControlCell else {
                     return UICollectionViewCell()
                 }
-                
                 cell.postListButton.reactive.pressed = postListButtonAction()
                 cell.boxListButton.reactive.pressed = boxListButtonAction()
-                
                 return cell
             }
         } else {
             guard let listCellType = ListCellType(rawValue: indexPath.row) else {
                 return UICollectionViewCell()
             }
-            let index = indexPath.section - 2
+            let index = getIndexForSection(indexPath: indexPath)
+            
             switch listCellType {
             case .header:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.headerPost, for: indexPath) as? HeaderPostCell else {
@@ -137,7 +136,6 @@ class UserLibraryListDataSource: NSObject, UICollectionViewDataSource {
                         cell.photo.image = UIImage(data: data)
                     }
                 }
-                
                 return cell
             case .date:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Global.Cell.datePost, for: indexPath) as? DatePostCell else {
@@ -158,15 +156,15 @@ class UserLibraryListDataSource: NSObject, UICollectionViewDataSource {
                 cell.commentsCountButton.setTitle("View all \(viewModel.photos.value[index].commentsCount) comments", for: .normal)
                 cell.id = viewModel.photos.value[index].id
                 
-                                cell.commentsCountButton.reactive.pressed = CocoaAction(Action<Void, Void, NSError>{ _ in
-                                     let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
-                                     guard let strongSelf = self else {
-                                          return
-                                     }
-                                        strongSelf.delegate.navigatToCommentsViewController(mediaID: cell.id)
-                                     }
-                                     return producer
-                                })
+                cell.commentsCountButton.reactive.pressed = CocoaAction(Action<Void, Void, NSError>{ _ in
+                    let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
+                        guard let strongSelf = self else {
+                            return
+                        }
+                        strongSelf.delegate.navigatToCommentsViewController(mediaID: cell.id)
+                    }
+                    return producer
+                })
                 
                 return cell
             }
@@ -174,16 +172,16 @@ class UserLibraryListDataSource: NSObject, UICollectionViewDataSource {
     }
 }
 
-extension UserLibraryListDataSource: UICollectionViewDelegateFlowLayout {
+extension UserLibraryListDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size: CGSize
         
         if let sectionType = ListSectionType(rawValue: indexPath.section){
             switch sectionType {
             case .header:
-                size = CGSize(width: collectionView.frame.width - 10, height: 150)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.headerHeight)
             case .displayStyleControl:
-                size = CGSize(width: collectionView.frame.width - 10, height: 30)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.displayStyleControlHeight)
             }
         } else {
             guard let listCellType = ListCellType(rawValue: indexPath.row) else {
@@ -191,15 +189,15 @@ extension UserLibraryListDataSource: UICollectionViewDelegateFlowLayout {
             }
             switch listCellType {
             case .header:
-                size = CGSize(width: collectionView.frame.width - 10, height: 50)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.headerPostHeight)
             case .photo:
                 size = CGSize(width: collectionView.frame.width, height: collectionView.frame.width)
             case .date:
-                size = CGSize(width: collectionView.frame.width - 10, height: 25)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.datePostHeight)
             case .likes:
-                size = CGSize(width: collectionView.frame.width - 10, height: 25)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.likesPostHeight)
             case .comments:
-                size = CGSize(width: collectionView.frame.width - 10, height: 27)
+                size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.commentsPostHeight)
             }
         }
         return size

@@ -41,8 +41,10 @@ class UserLibraryController: UIViewController, UserLibraryDelegate {
     
     var displayStyle: MutableProperty<DisplayStyle> = MutableProperty(DisplayStyle.Box)
 
-    var boxDelegate: UserLibraryBoxDataSource!
-    var listDelegate: UserLibraryListDataSource!
+    var tempDelegate: UserLibraryDataSourceProtocol?
+    
+    //var boxDelegate: UserLibraryBoxDataSource!
+    //var listDelegate: UserLibraryListDataSource!
     
     func navigatToCommentsViewController(mediaID: String) {
         let viewController = CommentsViewController()
@@ -66,11 +68,11 @@ class UserLibraryController: UIViewController, UserLibraryDelegate {
         collectionView.register(UINib(nibName: Global.Cell.commentsPost, bundle: nil), forCellWithReuseIdentifier: Global.Cell.commentsPost)
 
 
-        boxDelegate = UserLibraryBoxDataSource(viewModel: viewModel, cellsCount: cellsCount, displayStyle: displayStyle)
-        listDelegate = UserLibraryListDataSource(viewModel: viewModel, delegate: self, cellsCount: cellsCount, displayStyle: displayStyle)
+        //boxDelegate = UserLibraryBoxDataSource(viewModel: viewModel, cellsCount: cellsCount, displayStyle: displayStyle)
+        //listDelegate = UserLibraryListDataSource(viewModel: viewModel, delegate: self, displayStyle: displayStyle)
         
-        collectionView.dataSource = boxDelegate
-        collectionView.delegate = boxDelegate
+        //collectionView.dataSource = boxDelegate
+        //collectionView.delegate = boxDelegate
         
         viewModel.fetchUser()
         
@@ -108,6 +110,8 @@ class UserLibraryController: UIViewController, UserLibraryDelegate {
             setupDisplayStyle = .init(tempDisplayStyleDissposable)
         }
         
+        displayStyle.value = .Box
+        
         collectionView.reloadData()
     }
 
@@ -136,12 +140,12 @@ class UserLibraryController: UIViewController, UserLibraryDelegate {
             }
             switch tempStyle {
             case .Box:
-                strongSelf.collectionView.dataSource = strongSelf.boxDelegate
-                strongSelf.collectionView.delegate = strongSelf.boxDelegate
+                strongSelf.tempDelegate = UserLibraryBoxDataSource(viewModel: strongSelf.viewModel, cellsCount: strongSelf.cellsCount, displayStyle: strongSelf.displayStyle)
             case .List:
-                strongSelf.collectionView.dataSource = strongSelf.listDelegate
-                strongSelf.collectionView.delegate = strongSelf.listDelegate
+                strongSelf.tempDelegate = UserLibraryListDataSource(viewModel: strongSelf.viewModel, delegate: strongSelf, displayStyle: strongSelf.displayStyle)
             }
+            strongSelf.collectionView.dataSource = strongSelf.tempDelegate
+            strongSelf.collectionView.delegate = strongSelf.tempDelegate
             strongSelf.collectionView.reloadData()
         }
     }

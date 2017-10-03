@@ -17,41 +17,28 @@ enum BoxSectionType: Int {
     case photo = 3
 }
 
-class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
+class UserLibraryBoxDataSource: NSObject, UserLibraryDataSourceProtocol {
+    
+    fileprivate struct Constant {
+        static let indexCellToScroll = 1
+        
+        internal struct CellSize {
+            static let indents: CGFloat = 10
+            static let headerHeight: CGFloat = 150
+            static let displayStyleControlHeight: CGFloat = 30
+            static let sizeControlHeight: CGFloat = 39
+        }
+    }
     
     let viewModel: UserLibraryViewModel
     let cellsCount: MutableProperty<Int>
-    let displayStyle: MutableProperty<DisplayStyle>
+    var displayStyle: MutableProperty<DisplayStyle>
     var setupSlider: ScopedDisposable<AnyDisposable>?
 
     init(viewModel: UserLibraryViewModel, cellsCount: MutableProperty<Int>, displayStyle: MutableProperty<DisplayStyle>) {
         self.viewModel = viewModel
         self.cellsCount = cellsCount
         self.displayStyle = displayStyle
-    }
-    
-    private func postListButtonAction() -> CocoaAction<UIButton> {
-        return CocoaAction<UIButton>(Action<Void, Void, NSError>{ _ in
-            let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.displayStyle.value = .List
-            }
-            return producer
-        })
-    }
-    
-    private func boxListButtonAction() -> CocoaAction<UIButton> {
-        return CocoaAction<UIButton>(Action<Void, Void, NSError>{ _ in
-            let producer: SignalProducer<Void, NSError> = SignalProducer {[weak self] () -> () in
-                guard let strongSelf = self else {
-                    return
-                }
-                strongSelf.displayStyle.value = .Box
-            }
-            return producer
-        })
     }
     
     private func photoChooseButtonAction(indexPath: IndexPath, collectionView: UICollectionView) -> CocoaAction<UIButton> {
@@ -70,15 +57,20 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
     }
     
     private func setSliderDisposable(slider: UISlider) -> Disposable? {
-        return slider.reactive.values.observeValues({ [weak self] (temp) in
+        return slider.reactive.values.observeValues({ [weak self] (cellCount) in
             guard let strongSelf = self else {
                 return
             }
-            let temp = Int(temp)
-            if temp != strongSelf.cellsCount.value {
-                strongSelf.cellsCount.value = temp
+            let cellCount = Int(cellCount)
+            if cellCount != strongSelf.cellsCount.value {
+                strongSelf.cellsCount.value = cellCount
             }
         })
+    }
+    
+    private func indexPathToScrollPhoto(indexPath: IndexPath) -> IndexPath {
+        let result = IndexPath(row: Constant.indexCellToScroll, section: indexPath.row + ListSectionType.count)
+        return result
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -100,10 +92,7 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let tempUser = viewModel.user else {
-            return UICollectionViewCell()
-        }
-        guard let sectionType = BoxSectionType(rawValue: indexPath.section) else {
+        guard let tempUser = viewModel.user, let sectionType = BoxSectionType(rawValue: indexPath.section) else {
             return UICollectionViewCell()
         }
         
@@ -143,14 +132,13 @@ class UserLibraryBoxDataSource: NSObject, UICollectionViewDataSource {
                     cell.photo.image = UIImage(data: data)
                 }
             }
-            cell.photoChooseButton.reactive.pressed = photoChooseButtonAction(indexPath: IndexPath.init(row: 1, section: indexPath.row + 2), collectionView: collectionView)
+            cell.photoChooseButton.reactive.pressed = photoChooseButtonAction(indexPath: indexPathToScrollPhoto(indexPath: indexPath), collectionView: collectionView)
             return cell
         }
-    
     }
 }
 
-extension UserLibraryBoxDataSource: UICollectionViewDelegateFlowLayout {
+extension UserLibraryBoxDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size: CGSize
         
@@ -160,13 +148,13 @@ extension UserLibraryBoxDataSource: UICollectionViewDelegateFlowLayout {
         
         switch sectionType {
         case .header:
-            size = CGSize(width: collectionView.frame.width - 10, height: 150)
+            size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.headerHeight)
         case .displayStyleControl:
-            size = CGSize(width: collectionView.frame.width - 10, height: 30)
+            size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.displayStyleControlHeight)
         case .sizeControl:
-            size = CGSize(width: collectionView.frame.width - 10, height: 39)
+            size = CGSize(width: collectionView.frame.width - Constant.CellSize.indents, height: Constant.CellSize.sizeControlHeight)
         default:
-            let side = (collectionView.frame.width / CGFloat(cellsCount.value)) - 0.5
+            let side = (collectionView.frame.width / CGFloat(cellsCount.value)) - 1 / UIScreen.main.scale
             size = CGSize(width: side, height: side)
         }
         

@@ -31,6 +31,7 @@
 		EE5985411F5845C80086E31B /* UserLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5985401F5845C80086E31B /* UserLibraryViewModel.swift */; };
 		EE5A5EB01F7CD0BE0080B2AC /* UserLibraryBoxDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5A5EAF1F7CD0BE0080B2AC /* UserLibraryBoxDataSource.swift */; };
 		EE5A5EB41F7D137E0080B2AC /* UserLibraryListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5A5EB31F7D137E0080B2AC /* UserLibraryListDataSource.swift */; };
+		EE5F50D91F836F4A00B415B9 /* UserLibraryDataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5F50D81F836F4A00B415B9 /* UserLibraryDataSourceProtocol.swift */; };
 		EE7038091F691E4000856DA5 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7038071F691E4000856DA5 /* CommentsViewController.swift */; };
 		EE70380A1F691E4000856DA5 /* CommentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE7038081F691E4000856DA5 /* CommentsViewController.xib */; };
 		EE70380F1F691EDE00856DA5 /* CommentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE70380D1F691EDE00856DA5 /* CommentViewCell.swift */; };
@@ -93,6 +94,7 @@
 		EE5985401F5845C80086E31B /* UserLibraryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLibraryViewModel.swift; sourceTree = "<group>"; };
 		EE5A5EAF1F7CD0BE0080B2AC /* UserLibraryBoxDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLibraryBoxDataSource.swift; sourceTree = "<group>"; };
 		EE5A5EB31F7D137E0080B2AC /* UserLibraryListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLibraryListDataSource.swift; sourceTree = "<group>"; };
+		EE5F50D81F836F4A00B415B9 /* UserLibraryDataSourceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLibraryDataSourceProtocol.swift; sourceTree = "<group>"; };
 		EE7038071F691E4000856DA5 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		EE7038081F691E4000856DA5 /* CommentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsViewController.xib; sourceTree = "<group>"; };
 		EE70380D1F691EDE00856DA5 /* CommentViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewCell.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				EE7918AF1F792B270069E3CE /* UserLibraryController.xib */,
 				EE5A5EAF1F7CD0BE0080B2AC /* UserLibraryBoxDataSource.swift */,
 				EE5A5EB31F7D137E0080B2AC /* UserLibraryListDataSource.swift */,
+				EE5F50D81F836F4A00B415B9 /* UserLibraryDataSourceProtocol.swift */,
 			);
 			path = UserLibrary;
 			sourceTree = "<group>";
@@ -616,6 +619,7 @@
 				EE5801F61F56E80600541C29 /* CacheUserDataProvider.swift in Sources */,
 				EE7918B81F792D350069E3CE /* HeaderCell.swift in Sources */,
 				EE4EC7681F665F1B00F4BFA5 /* UserLibraryProvider.swift in Sources */,
+				EE5F50D91F836F4A00B415B9 /* UserLibraryDataSourceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

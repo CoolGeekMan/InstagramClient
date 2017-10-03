@@ -15,7 +15,27 @@ enum DisplayStyle {
     case Box
 }
 
-class UserLibraryViewModel {
+protocol UserLibraryViewModelProtocol {
+    
+    var user: User? { get set }
+    var availableUsers: [User] { get set }
+    var photos: MutableProperty<[Photo]> { get set }
+    
+    func fetchUser()
+    func userName() -> String?
+    func fetchAvailableUsers()
+    func saveUserID(id: String)
+    func haveMedia() -> Bool
+    func media(completion: @escaping () -> ())
+    func fetchPhotos()
+    func downloadPhoto(index: Int, completion: @escaping (Data) -> ())
+    func cellCount(displayStyle: DisplayStyle) -> Int
+    func photoId(index: Int) -> String?
+    func reloadData(completion: @escaping () -> ())
+
+}
+
+class UserLibraryViewModel: UserLibraryViewModelProtocol {
 
     private let authorizationProvider = AuthorizationProvider()
     private let cacheDataProvider = CacheDataProvider()
@@ -26,9 +46,7 @@ class UserLibraryViewModel {
     
     var photos: MutableProperty<[Photo]> = MutableProperty([])
     
-
-    
-    internal func fetchUser() {
+    func fetchUser() {
         do {
             let id = try authorizationProvider.userID()
             user = try authorizationProvider.user(id: id)
@@ -37,14 +55,14 @@ class UserLibraryViewModel {
         }
     }
     
-    internal func userName() -> String? {
+    func userName() -> String? {
         guard let tempUser = user else {
             return nil
         }
         return tempUser.userName
     }
     
-    internal func fetchAvailableUsers() {
+    func fetchAvailableUsers() {
         do {
             availableUsers = try authorizationProvider.users()
         } catch {
@@ -52,18 +70,18 @@ class UserLibraryViewModel {
         }
     }
     
-    internal func saveUserID(id: String) {
+    func saveUserID(id: String) {
         authorizationProvider.saveUserID(id: id)
     }
     
-    internal func haveMedia() -> Bool {
+    func haveMedia() -> Bool {
         guard let tempUser = user else {
             return false
         }
         return cacheDataProvider.havePhotos(token: tempUser.token)
     }
     
-    internal func media(completion: @escaping () -> ()) {
+    func media(completion: @escaping () -> ()) {
         guard let tempUser = user else {
             return
         }
@@ -80,14 +98,14 @@ class UserLibraryViewModel {
         }
     }
     
-    internal func fetchPhotos() {
+    func fetchPhotos() {
         guard let tempUser = user else {
             return
         }
         photos.value = cacheDataProvider.photos(token: tempUser.token)
     }
     
-    internal func downloadPhoto(index: Int, completion: @escaping (Data) -> ()) {
+    func downloadPhoto(index: Int, completion: @escaping (Data) -> ()) {
         guard let link = photos.value[index].imageLink, let id = photos.value[index].id else {
             return
         }
